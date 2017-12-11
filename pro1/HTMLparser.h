@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "String.h"
-#include "Stack.h"
+#include "HTMLElement.h"
 #include "LinkList.h"
 #include <stack>
 
@@ -10,11 +10,8 @@ class HTMLparser
 private:
     String html;
     std::stack<HTMLElement> doms;
-   // HTMLElement *root;
-    
     LinkList<HTMLElement> result;
     std::string _filename;
-    //int token_number, end_token_number;
     
 public:
     HTMLparser(std::string filename);
@@ -33,13 +30,11 @@ public:
 
     PageInfo parse();
 
-    PageInfo parse_tree();
-
     void destory();
+
     virtual ~HTMLparser()
     {
         destory();
-
     }
 };
 

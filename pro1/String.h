@@ -11,15 +11,12 @@ class String
 private:
     CharType* data;
     SizeType tok_point;
-
-
 public:
-
     explicit String(const CharType* str = nullptr);
     explicit String(std::wstring);
     String(String& str);
     ~String();
-    void destory(); 
+    void destory();
     String& operator=(const String& str);
 
 public:

@@ -18,10 +18,10 @@ public:
 
     Error() = default;
 
-    void detail();
+    void what();
 };
 
-inline void Error::detail()
+inline void Error::what()
 {
     std::cout << "Error message: [" << msg << "]" << std::endl;;
     abort();

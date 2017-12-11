@@ -1,7 +1,6 @@
 ﻿#pragma once
 /*
  * 模板类:单链表
- *
  */
 #include <memory>
 
@@ -29,12 +28,9 @@ private:
 public:
     std::shared_ptr<Node<ElemType>> head;
 
-    LinkList()
+    LinkList(): head(nullptr), _size(0)
     {
-        head = nullptr;
-        _size = 0;
     }
-
     ElemType& operator[](unsigned int index);
     void insert(ElemType data);
     void push_back(ElemType data);
@@ -69,8 +65,6 @@ template <typename ElemType>
 void LinkList<ElemType>::insert(ElemType data)
 {
     std::shared_ptr<Node<ElemType>> ins = std::make_shared<Node<ElemType>>(data);
-    
-    //Node<ElemType>* ins = new Node<ElemType>(data);
     _size++;
     if (head == nullptr)
     {
@@ -83,7 +77,6 @@ void LinkList<ElemType>::insert(ElemType data)
         current = current->_next;
     }
     current->_next = ins;
-    return;
 }
 
 template <typename ElemType>
@@ -108,16 +101,7 @@ unsigned int LinkList<ElemType>::size() const
 template <typename ElemType>
 void LinkList<ElemType>::remove_all()
 {
-    //    auto current = head;
-    //
-    //    while (current)
-    //    {
-    //        auto next = current->_next;
-    //        delete current;
-    //        current = next;
-    //    }
-    //    _size = 0;
-    //    head = nullptr;
+    //已交由智能指针管理
 }
 
 /**

@@ -1,5 +1,4 @@
-﻿
-#include "HTMLparser.h"
+﻿#include "HTMLparser.h"
 #include <locale>
 
 using namespace std;
@@ -58,7 +57,6 @@ void init_token()
     token[37] = String(L"ignore_js_op");
 }
 
-//#define DEBUG_OUTPUT
 HTMLparser::HTMLparser(string filename)
 {
     if (!token_flag)
@@ -88,7 +86,6 @@ void HTMLparser::load(std::string filename)
     fclose(fp);
 
     std::wstring wDst = Conver_GBK.from_bytes(buf);
-    //wprintf(L"%ls", wDst.c_str());
     delete[] buf;
     buf = nullptr;
     html = String(wDst);
@@ -120,7 +117,6 @@ void HTMLparser::toknize()
                 if (!is_not_paired(e))
                 {
                     parse_content(e, t);
-                    //Push(doms, e);
                     doms.push(e);
                 }
                 else
@@ -137,7 +133,6 @@ void HTMLparser::toknize()
                     //栈顶元素与当前元素类型相同，将栈顶元素出栈，添加进结果链表中
                     if (top._type == e._type)
                     {
-                        //Pop(doms, top);
                         top = doms.top();
                         doms.pop();
                         result.push_back(top);
@@ -147,27 +142,10 @@ void HTMLparser::toknize()
                     else
                     {
                         //html标签匹配错误未闭合
-                        //
-                        /*
-                         *放弃错误处理，由于下载的网页标签不符合的情况太严重，
-                         *无法有效解决，但已经可以提取足够的信息
-                         */
                         cout << "Warning: 不匹配的标签" << endl;
-                        //                        cout << endl << "栈顶标签: ";
-                        //                        top->type.output();
                         cout << "当前标签: ";
                         e.type.output();
                         cout << endl;
-                        //                        while (top)
-                        //                        {
-                        //                            Pop(doms, top);
-                        //                            if (top->_type == e->_type)
-                        //                            {
-                        //                                result.push_back(top);
-                        //                                break;
-                        //                            }
-                        //                        }
-                        //throw Error("Unmatched tag");
                     }
                 }
             }
@@ -177,7 +155,7 @@ void HTMLparser::toknize()
     }
     catch (Error& e)
     {
-        e.detail();
+        e.what();
     }
 }
 
@@ -214,8 +192,6 @@ bool HTMLparser::is_not_paired(HTMLElement e)
  */
 HTMLElement HTMLparser::parse_token(String s)
 {
-    //return nullptr;
-    //auto e = new HTMLElement();
     HTMLElement e;
     // 处理结束节点的情况
     if (s[1] == L'/')
@@ -231,17 +207,9 @@ HTMLElement HTMLparser::parse_token(String s)
                     if (e.type == token[j])
                     {
                         e._type = j;
-
                         break;
                     }
                 }
-                //                if (e._type == -1)
-                //                {
-                //                    cout << "Warning: 不支持的dom标志" << endl;
-                //                    cout << "Tag: ";
-                //                    s.output();
-                //                    cout << endl;
-                //                }
                 return e;
             }
         }
@@ -263,18 +231,10 @@ HTMLElement HTMLparser::parse_token(String s)
                         break;
                     }
                 }
-                if (e._type == -1)
-                {
-                    cout << "Warning: 不支持的dom标志" << endl;
-                    cout << "Tag: ";
-                    s.output();
-                    cout << endl;
-                }
                 return e;
             }
         }
     }
-    //return nullptr;
 }
 
 /**
@@ -296,10 +256,7 @@ void HTMLparser::parse_content(HTMLElement& e, String s)
     {
         e.content = s.substr(start, s.size());
     }
-    //    else
-    //    {
-    //        e.content = String();
-    //    }
+
     //提取 class 信息
     if (s.indexof(String(L"class")) != s.size())
     {
@@ -411,20 +368,10 @@ PageInfo HTMLparser::parse()
     }
     catch (Error& e)
     {
-        e.detail();
+        e.what();
     }
-
+    
     return info;
-}
-
-/**
- * \brief 遍历dom节点树,提取网页内容
- * \return 
- */
-PageInfo HTMLparser::parse_tree()
-{
-    // TODO: 完成树的生成和遍历
-    return PageInfo();
 }
 
 /**
@@ -432,8 +379,5 @@ PageInfo HTMLparser::parse_tree()
  */
 void HTMLparser::destory()
 {
-    //result.remove_all();
-    //ClearStack(doms);
-
     html.destory();
 }
