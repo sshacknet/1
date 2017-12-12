@@ -12,8 +12,8 @@ private:
     CharType* data;
     SizeType tok_point;
 public:
-    explicit String(const CharType* str = nullptr);
-    explicit String(std::wstring);
+    String(CharType* str = nullptr);
+    String(std::wstring);
     String(String& str);
     ~String();
     void destory();

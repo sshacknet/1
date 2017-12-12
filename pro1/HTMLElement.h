@@ -71,7 +71,6 @@ public:
     String content;//发帖内容
     String time;
 
-    //bool unicodeencode =false;
 public:
     void show();
 };

@@ -23,7 +23,6 @@ int StackLength(Stack S)
 ElemType GetTop(Stack S)
 {
     if (S.top == S.base)
-       // e = nullptr;
         throw Error("GetTop when stack is empty");
     return  *(S.top - 1);
 }
@@ -54,7 +53,6 @@ void ClearStack(Stack& S)
     while (current != S.top)
     {
         auto next = current + 1;
-        //current;
         current = next;
     }
     free(S.base);

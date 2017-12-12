@@ -1,10 +1,9 @@
-﻿
-#include "String.h"
+﻿#include "String.h"
 
 using std::cout;
 using std::endl;
 
-String::String(const CharType* str): tok_point(0)
+String::String( CharType* str): tok_point(0)
 {
     int size = (str ? wcslen(str) + 1 : 1);
     data = new CharType[size];
@@ -17,7 +16,6 @@ String::String(const CharType* str): tok_point(0)
         data[0] = '\0';
     }
 }
-
 String::String(std::wstring str): tok_point(0)
 {
     int size = str.size() + 1;
@@ -25,7 +23,7 @@ String::String(std::wstring str): tok_point(0)
     wcscpy(data, str.data());
 }
 
-String::String( String& str): tok_point(0)
+String::String(String& str): tok_point(0)
 {
     data = new CharType[str.size() + 1];
     wcscpy(data, str.data);
@@ -98,7 +96,8 @@ String String::substr(SizeType start_p, SizeType end_p)
         subdata[j] = data[i];
         j++;
     }
-    subdata[j] = L'\0';
+    //memcpy(subdata, &data[start_p], end_p - start_p);
+    subdata[end_p - start_p] = L'\0';
     String tmp(subdata);
     delete[] subdata;
     return tmp;
@@ -220,7 +219,7 @@ String String::strtok(CharType delim, bool first)
                 break;
             }
         }
-
+        
 
         String tmp;
         if (i == size() && tok_point < size() && end == 0)
@@ -281,7 +280,7 @@ String decode(String src)
     String result;
     String tag_end(L";");
     String tag_front(L"&");
-    
+
     unsigned int first_tok = src.indexof(tag_front);
     cout << first_tok;
     if (first_tok > 0)
@@ -293,10 +292,9 @@ String decode(String src)
 
     String temp;
     temp = (src.strtok(L'&', true));
-   
+
     while (!temp.empty())
     {
-
         int ans = 0;
         for (int i = 2; i < temp.indexof(tag_end); i++)
         {
@@ -314,8 +312,6 @@ String decode(String src)
             result = result.concat(temp.substr(temp.indexof(tag_end) + 1, temp.size()));
         temp = src.strtok(L'&');
     }
-
-   
 
 
     return result;

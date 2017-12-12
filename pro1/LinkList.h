@@ -16,6 +16,11 @@ public:
     {
         _next = nullptr;
     };
+
+    inline bool hasNext()
+    {
+        return (_next) ? true : false;
+    }
 };
 
 
@@ -27,10 +32,12 @@ private:
     unsigned int _size;
 public:
     std::shared_ptr<Node<ElemType>> head;
+    std::shared_ptr<Node<ElemType>> end;
 
-    LinkList(): head(nullptr), _size(0)
+    LinkList(): head(nullptr), _size(0), end(nullptr)
     {
     }
+
     ElemType& operator[](unsigned int index);
     void insert(ElemType data);
     void push_back(ElemType data);
@@ -69,14 +76,11 @@ void LinkList<ElemType>::insert(ElemType data)
     if (head == nullptr)
     {
         head = ins;
+        end = ins;
         return;
     }
-    auto current = head;
-    while (current->_next)
-    {
-        current = current->_next;
-    }
-    current->_next = ins;
+    end->_next = ins;
+    end = ins;
 }
 
 template <typename ElemType>

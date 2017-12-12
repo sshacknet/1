@@ -8,6 +8,7 @@ using namespace std;
 #define P 29
 #define TD 18
 #define EM 27
+
 String token[40];
 bool token_flag = false;
 int token_number = 38;
@@ -98,20 +99,44 @@ void HTMLparser::toknize()
 {
     //cout << "网页长度: " << html.size() << endl;
     String t;
+    wchar_t* __html = html.c_str();
+    wchar_t* buffer;
+    wchar_t* token = nullptr;
+    LinkList<String> tokens;
     try
     {
-        int turn = 0;
-        t = html.strtok(L'<', true);
+        token = wcstok(__html, L"<", &buffer);
+        while (token)
+        {
+            String tmp(token);
+            t = String(L"<").concat(tmp);
+            tokens.push_back(t);
+            if (tokens.size() > 700)
+                break;
+            token = wcstok(nullptr, L"<", &buffer);
+        }
+    }
+    catch (Error& error)
+    {
+        error.what();
+    }
+
+    auto current_node = tokens.head;
+
+
+    try
+    {
         while (!t.empty())
         {
+            if (!current_node)
+                return;
+            t = current_node->_data;
             if (t[1] == L'!')
             {
-                t = html.strtok(L'<');
+                current_node = current_node->_next;
                 continue;
             }
             HTMLElement e = parse_token(t);
-
-
             if (e.is_start_token)
             {
                 if (!is_not_paired(e))
@@ -142,15 +167,16 @@ void HTMLparser::toknize()
                     else
                     {
                         //html标签匹配错误未闭合
-                        cout << "Warning: 不匹配的标签" << endl;
-                        cout << "当前标签: ";
-                        e.type.output();
-                        cout << endl;
+//                        cout << "Warning: 不匹配的标签" << endl;
+//                        cout << "当前标签: ";
+//                        e.type.output();
+//                        cout << endl;
                     }
                 }
             }
 
-            t = html.strtok(L'<');
+
+            current_node = current_node->_next;
         }
     }
     catch (Error& e)
@@ -370,7 +396,7 @@ PageInfo HTMLparser::parse()
     {
         e.what();
     }
-    
+
     return info;
 }
 
